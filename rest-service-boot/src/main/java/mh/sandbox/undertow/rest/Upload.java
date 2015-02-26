@@ -14,10 +14,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.CompletionHandler;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.time.LocalTime;
 import java.util.Random;
 
@@ -49,6 +46,26 @@ public class Upload implements HttpHandler{
             }
         });
     }
+
+    static class AsynchronousFileChannelSubscriber extends Subscriber<ByteBuffer>{
+
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+        }
+
+        @Override
+        public void onNext(ByteBuffer byteBuffer) {
+
+        }
+    }
+
+
 
     @Override
     public void handleRequest(HttpServerExchange exchange) throws Exception {
