@@ -3,8 +3,12 @@ package mh.sandbox.undertow.rest;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Methods;
+import javafx.collections.ObservableListBase;
+import org.xnio.Pool;
 import org.xnio.Pooled;
 import org.xnio.channels.StreamSourceChannel;
+import rx.Observable;
+import rx.Subscriber;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -19,9 +23,38 @@ import java.util.Random;
 
 @Route(method = Methods.POST_STRING, template = "upload")
 public class Upload implements HttpHandler{
+
+    Observable<ByteBuffer> observeRequest(final HttpServerExchange exchange){
+        return observeStreamSourceChannel(exchange.getRequestChannel(), exchange.getConnection().getBufferPool());
+    }
+
+    Observable<ByteBuffer> observeStreamSourceChannel(final StreamSourceChannel streamSourceChannel, final Pool<ByteBuffer> pool){
+        return Observable.create(new Observable.OnSubscribe<ByteBuffer>() {
+            @Override
+            public void call(Subscriber<? super ByteBuffer> subscriber) {
+                try(Pooled<ByteBuffer> bufferPooled = pool.allocate()){
+                    ByteBuffer buffer = bufferPooled.getResource();
+                    long readBytes;
+                    try {
+                        while(0<= (readBytes = streamSourceChannel.read(bufferPooled.getResource()))){
+                            buffer.flip();
+                            subscriber.onNext(buffer);
+                            buffer.flip();
+                        }
+                        subscriber.onCompleted();
+                    } catch (IOException e) {
+                        subscriber.onError(e);
+                    }
+                }
+            }
+        });
+    }
+
     @Override
     public void handleRequest(HttpServerExchange exchange) throws Exception {
         System.out.println("size request begin "+ LocalTime.now());
+
+
 
         Path path = FileSystems.getDefault().getPath("C:\\tmp", "upload" + new Random().nextInt());
         System.out.println("upload path  "+ path);
