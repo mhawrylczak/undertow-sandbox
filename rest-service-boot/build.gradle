@@ -7,15 +7,20 @@ version = '1.0'
 ext {
     bootVersion = '1.2.1.RELEASE'
     undertowVersion = '1.1.0.Final'
+    mongoReactiveVersion = '1.0.0-SNAPSHOT'
+    jacksonVersion = '2.5.1'
 }
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter:${bootVersion}"
-    compile "io.undertow:undertow-core:${undertowVersion}"
+    compile 'org.springframework.boot:spring-boot-starter:${bootVersion}'
+    compile 'io.undertow:undertow-core:${undertowVersion}'
+    compile 'org.mongodb:mongodb-driver-reactivestreams:${mongoReactiveVersion}'
+    compile 'com.fasterxml.jackson.core:jackson-core:${jacksonVersion}'
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
