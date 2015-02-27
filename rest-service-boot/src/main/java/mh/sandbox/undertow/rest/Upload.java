@@ -117,7 +117,7 @@ public class Upload implements HttpHandler{
         private Subscription subscription;
 
         private final AsynchronousFileChannel fileChannel;
-        private final HttpServerExchange exchange;
+        private final HttpServerExchange exchange;//TODO this action should be somehow attached to subscriber instead of being part of it
         private long pos = 0;
 
         public AsynchronousFileChannelAppenderSubscriber(HttpServerExchange exchange, AsynchronousFileChannel fileChannel) {
