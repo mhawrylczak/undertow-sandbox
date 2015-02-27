@@ -45,7 +45,7 @@ public class Upload implements HttpHandler{
             public void request(long n) {
                 org.reactivestreams.Subscriber<? super ByteBuffer> s = subscriber.get();
                 if (s == null){
-                    throw new RuntimeException("empty subscriber");
+                    throw new NullPointerException("empty subscriber");
                 }
 
                 if (n <= 0){
