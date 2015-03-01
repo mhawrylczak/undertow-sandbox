@@ -22,6 +22,8 @@ repositories {
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter:${bootVersion}'
+    compile 'org.springframework:spring-web:4.1.4.RELEASE'
+    compile 'org.springframework:spring-webmvc:4.1.4.RELEASE'
     compile 'io.undertow:undertow-core:${undertowVersion}'
     compile 'org.mongodb:mongodb-driver-reactivestreams:${mongoReactiveVersion}'
     compile 'com.fasterxml.jackson.core:jackson-core:${jacksonVersion}'

@@ -8,39 +8,35 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-
-import java.lang.annotation.Annotation;
 
 
 @SpringBootApplication
-public class Application  implements CommandLineRunner {
+public class Application implements CommandLineRunner {
 
     @Autowired
     private Undertow undertow;
-    
+
     @Bean
     @Autowired
-    public Undertow buildUndertow(@Qualifier("routingHandler") HttpHandler rootHandler){
-        Undertow.Builder builder = Undertow.builder().
-                addHttpListener(8080, "localhost").
-                setHandler(rootHandler);
+    public Undertow buildUndertow(@Qualifier("routingHandler") HttpHandler rootHandler) {
+        Undertow.Builder builder = Undertow.builder()
+                .addHttpListener(8080, "localhost")
+                .setHandler(rootHandler);
 
         return builder.build();
     }
 
     @Bean
     @Autowired
-    public HttpHandler routingHandler(ApplicationContext context){
+    public HttpHandler routingHandler(ApplicationContext context) {
         final RoutingHandler routes = new RoutingHandler();
         context.getBeansWithAnnotation(Route.class)
                 .values()
-                .forEach((bean)-> {
+                .forEach((bean) -> {
                     Route route = bean.getClass().getAnnotation(Route.class);
-                    routes.add(route.method(), route.template(), (HttpHandler)bean);
+                    routes.add(route.method(), route.template(), (HttpHandler) bean);
                 });
         return routes;
     }
