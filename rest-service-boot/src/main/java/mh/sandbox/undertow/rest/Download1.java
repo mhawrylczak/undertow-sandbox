@@ -23,7 +23,7 @@ public class Download1 implements HttpHandler {
     @Override
     public void handleRequest(HttpServerExchange exchange) throws Exception {
         FileChannel channel = FileChannel.open(FileSystems.getDefault().getPath("/tmp/upload75220729.zip"), StandardOpenOption.READ);
-        //channel is not anyc thus this uses additional thread to send 
+        //channel is not anyc thus this uses additional thread to send
         exchange.getResponseSender().transferFrom(channel, new DefaultIoCallback(){
             @Override
             public void onComplete(HttpServerExchange exchange, Sender sender) {
