@@ -32,6 +32,9 @@ public class Upload implements HttpHandler{
         return new StreamSourceChannelPublisher(requestChannel, bufferPool);
     }
 
+
+    //THIS seems to be ok for non chunked request, but for chunked it should blocks at line: long readBytes = requestChannel.read(buffer);
+
     static class StreamSourceChannelPublisher implements Publisher<ByteBuffer>{
 
         private final StreamSourceChannel requestChannel;
